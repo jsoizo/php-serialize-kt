@@ -1,27 +1,36 @@
 package com.jsoizo.phpserialize
 
+import com.jsoizo.phpserialize.error.PhpUnserializeException
+import com.jsoizo.phpserialize.error.UncaughtUnserializeException
+import com.jsoizo.phpserialize.error.UnexpectedValueException
+import com.jsoizo.phpserialize.error.UnknownTypeException
 import java.nio.charset.Charset
 
 class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
     fun unserialize(input: String): PValue {
         val iterator = input.iterator()
-        return parseValue(iterator)
+        try {
+            return parseValue(iterator)
+        } catch (e: Exception) {
+            when (e) {
+                is PhpUnserializeException -> throw e
+                else -> throw UncaughtUnserializeException(e)
+            }
+        }
     }
 
     private fun parseValue(iterator: CharIterator): PValue {
         val type = iterator.next()
-        return if (type == 'N') parseNull(iterator)
-        else {
-            iterator.next() // skip colon
-            when (type) {
-                's' -> parseString(iterator)
-                'i' -> parseInt(iterator)
-                'd' -> parseDouble(iterator)
-                'b' -> parseBoolean(iterator)
-                'a' -> parseArray(iterator)
-                'O' -> parseObject(iterator)
-                else -> throw IllegalArgumentException("Unknown type: $type")
-            }
+        if (type == 'N') return parseNull(iterator)
+        iterator.next() // skip colon
+        return when (type) {
+            's' -> parseString(iterator)
+            'i' -> parseInt(iterator)
+            'd' -> parseDouble(iterator)
+            'b' -> parseBoolean(iterator)
+            'a' -> parseArray(iterator)
+            'O' -> parseObject(iterator)
+            else -> throw UnknownTypeException(type)
         }
     }
 
@@ -60,7 +69,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
         val value: PArray = (0..<arraySize).fold(emptyPArray()) { acc, _ ->
             val key: PArrayKey = when (val parsed = parseValue(iterator)) {
                 is PArrayKey -> parsed
-                else -> throw IllegalArgumentException("Invalid Array Key")
+                else -> throw UnexpectedValueException("Invalid Array Key.", parsed)
             }
             val value = parseValue(iterator)
             acc + (key to value)
@@ -76,7 +85,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
         val value: Map<String, PValue> = (0..<fieldsSize).fold(emptyMap()) { acc, _ ->
             val fieldName = when (val parsed = parseValue(iterator)) {
                 is PString -> parsed.value
-                else -> throw IllegalArgumentException("Invalid Object field")
+                else -> throw UnexpectedValueException("Invalid Object field.", parsed)
             }
             val value = parseValue(iterator)
             acc.plus((fieldName to value))
