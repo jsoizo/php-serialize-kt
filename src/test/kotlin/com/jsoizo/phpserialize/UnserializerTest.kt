@@ -110,7 +110,8 @@ class UnserializerTest : FunSpec({
     }
 
     test("unserialize nested object") {
-        val input = "O:6:\"Person\":3:{s:4:\"name\";s:8:\"John Doe\";s:7:\"address\";O:7:\"Address\":1:{s:6:\"street\";s:11:\"123 Main St\";}s:3:\"age\";i:25;}"
+        val input =
+            "O:6:\"Person\":3:{s:4:\"name\";s:8:\"John Doe\";s:7:\"address\";O:7:\"Address\":1:{s:6:\"street\";s:11:\"123 Main St\";}s:3:\"age\";i:25;}"
         val result = unserializer.unserialize(input)
         result.shouldBeInstanceOf<PObject>()
         result.name shouldBe "Person"
