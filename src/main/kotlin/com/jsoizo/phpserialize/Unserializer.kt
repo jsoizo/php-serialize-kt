@@ -69,8 +69,20 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
         return value
     }
 
-    private fun parseObject(iterator: CharIterator): PArray {
-        TODO()
+    private fun parseObject(iterator: CharIterator): PObject {
+        val name = parseString(iterator).value
+        val fieldsSize = iterator.readUntil(':').toInt()
+        iterator.next() // skip opening brace
+        val value: Map<String, PValue> = (0..<fieldsSize).fold(emptyMap()) { acc, _ ->
+            val fieldName = when(val parsed = parseValue(iterator)) {
+                is PString -> parsed.value
+                else -> throw IllegalArgumentException("Invalid Object field")
+            }
+            val value = parseValue(iterator)
+            acc.plus((fieldName to value))
+        }
+        iterator.next() // skip closing brace
+        return PObject(name, value)
     }
 
     private fun parseNull(iterator: CharIterator): PNull {

@@ -23,7 +23,6 @@ value class PArray(val value: LinkedHashMap<PArrayKey, PValue>) : PValue {
 
 fun emptyPArray() = PArray(LinkedHashMap())
 
-@JvmInline
-value class PObject(val value: Map<PString, PValue>) : PValue
+data class PObject(val name: String, val value: Map<String, PValue>) : PValue, Map<String, PValue> by value
 
 data object PNull : PValue
