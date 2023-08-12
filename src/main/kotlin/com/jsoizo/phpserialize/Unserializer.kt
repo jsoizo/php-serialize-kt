@@ -10,10 +10,10 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
 
     private fun parseValue(iterator: CharIterator): PValue {
         val type = iterator.next()
-        if (type == 'N') return parseNull(iterator)
+        return if (type == 'N') parseNull(iterator)
         else {
             iterator.next() // skip colon
-            return when (type) {
+            when (type) {
                 's' -> parseString(iterator)
                 'i' -> parseInt(iterator)
                 'd' -> parseDouble(iterator)

@@ -17,7 +17,7 @@ value class PDouble(val value: Double) : PValue
 value class PBoolean(val value: Boolean) : PValue
 
 @JvmInline
-value class PArray(val value: LinkedHashMap<PArrayKey, PValue>) : PValue {
+value class PArray(val value: LinkedHashMap<PArrayKey, PValue>) : PValue, Map<PArrayKey, PValue> by value {
     operator fun plus(item: Pair<PArrayKey, PValue>): PArray = this.apply { value.put(item.first, item.second) }
 }
 
