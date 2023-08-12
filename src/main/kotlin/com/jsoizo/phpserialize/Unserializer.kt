@@ -55,7 +55,18 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
     }
 
     private fun parseArray(iterator: CharIterator): PArray {
-        TODO()
+        val arraySize = iterator.readUntil(':').toInt()
+        iterator.next() // skip opening brace
+        val value: PArray = (0..<arraySize).fold(emptyPArray()){ acc, _ ->
+            val key: PArrayKey = when (val parsed = parseValue(iterator)) {
+                is PArrayKey -> parsed
+                else -> throw IllegalArgumentException("Invalid Array Key")
+            }
+            val value = parseValue(iterator)
+            acc + (key to value)
+        }
+        iterator.next() // skip closing brace
+        return value
     }
 
     private fun parseObject(iterator: CharIterator): PArray {
