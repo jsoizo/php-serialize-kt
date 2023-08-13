@@ -76,7 +76,7 @@ import com.jsoizo.phpserialize.*
 
 val unserializer = Unserializer()
 
-val serializedArray = "a:2:{i:1;s:3:\"one\";i:2;s:3:\"two\";}"
+val serializedArray = "a:2:{i:0;s:4:\"zero\";i:1;s:3:\"one\";}"
 val unserializedArray = unserializer.unserialize(serializedArray)
 // PArray(value={PInt(value=0)=PString(value=zero), PInt(value=1)=PString(value=one)})
 
@@ -93,7 +93,7 @@ import com.jsoizo.phpserialize.*;
 
 Unserializer unserializer = new Unserializer();
 
-String serializedArray = "a:2:{i:1;s:3:\"one\";i:2;s:3:\"two\";}";
+String serializedArray = "a:2:{i:0;s:4:\"zero\";i:1;s:3:\"one\";}";
 PValue unserializedArray = unserializer.unserialize(serializedArray);
 
 String serializedObject = "O:12:\"ExampleClass\":2:{s:6:\"field1\";i:42;s:6:\"field2\";s:5:\"hello\";}";
