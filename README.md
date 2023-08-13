@@ -102,4 +102,4 @@ PValue unserializedObject = unserializer.unserialize(serializedObject);
 
 ## License
 
-This project is licensed under the @jsoizo License - see the LICENSE.md file for details
+This project is licensed under the @jsoizo License - see the [LICENSE](./LICENSE) file for details
