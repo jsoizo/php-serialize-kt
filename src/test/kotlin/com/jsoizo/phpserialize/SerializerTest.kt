@@ -68,37 +68,29 @@ class SerializerTest : FunSpec({
     }
 
     test("serialize array") {
-        val input = PArray(
-            LinkedHashMap(
-                mapOf(
-                    PInt(0) to PBoolean(true),
-                    PInt(1) to PNull,
-                    PInt(2) to PDouble(-421000000.0),
-                    PInt(3) to PString("A to Z")
-                )
-            )
+        val input = pArrayOf(
+            PInt(0) to PBoolean(true),
+            PInt(1) to PNull,
+            PInt(2) to PDouble(-421000000.0),
+            PInt(3) to PString("A to Z")
         )
         val result = serializer.serialize(input)
         result shouldBe "a:4:{i:0;b:1;i:1;N;i:2;d:-421000000;i:3;s:6:\"A to Z\";}"
     }
 
     test("serialize nested array") {
-        val input = PArray(
-            LinkedHashMap(
-                mapOf(
-                    PInt(42) to PBoolean(true),
-                    PString("A to Z") to PArray(
-                        LinkedHashMap(
-                            mapOf(
-                                PInt(0) to PInt(1),
-                                PInt(1) to PInt(2),
-                                PInt(2) to PInt(3)
-                            )
-                        )
-                    ),
-                    PInt(99) to PNull
+        val input = pArrayOf(
+            PInt(42) to PBoolean(true),
+            PString("A to Z") to PArray(
+                LinkedHashMap(
+                    mapOf(
+                        PInt(0) to PInt(1),
+                        PInt(1) to PInt(2),
+                        PInt(2) to PInt(3)
+                    )
                 )
-            )
+            ),
+            PInt(99) to PNull
         )
         val result = serializer.serialize(input)
         result shouldBe "a:3:{i:42;b:1;s:6:\"A to Z\";a:3:{i:0;i:1;i:1;i:2;i:2;i:3;}i:99;N;}"

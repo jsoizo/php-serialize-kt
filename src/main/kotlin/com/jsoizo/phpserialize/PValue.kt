@@ -21,6 +21,7 @@ data class PArray(val value: LinkedHashMap<PArrayKey, PValue>) : PValue, Map<PAr
 }
 
 fun emptyPArray() = PArray(LinkedHashMap())
+fun pArrayOf(vararg pairs: Pair<PArrayKey, PValue>) = emptyPArray().apply { pairs.forEach { this + it } }
 
 data class PObject(val name: String, val value: Map<String, PValue>) : PValue, Map<String, PValue> by value
 
