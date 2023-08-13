@@ -3,6 +3,9 @@ plugins {
     `java-library`
 }
 
+group = "com.jsoizo"
+version = "0.1.0-SNAPSHOT"
+
 repositories {
     mavenCentral()
 }
