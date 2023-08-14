@@ -18,6 +18,8 @@ value class PBoolean(val value: Boolean) : PValue
 
 data class PArray(val value: LinkedHashMap<PArrayKey, PValue>) : PValue, Map<PArrayKey, PValue> by value {
     operator fun plus(item: Pair<PArrayKey, PValue>): PArray = this.apply { value.put(item.first, item.second) }
+    fun get(key: String): PValue? = value[PString(key)]
+    fun get(key: Long): PValue? = value[PInt(key)]
 }
 
 fun emptyPArray() = PArray(LinkedHashMap())
