@@ -66,7 +66,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
     private fun parseArray(iterator: CharIterator): PArray {
         val arraySize = iterator.readUntil(':').toInt()
         iterator.next() // skip opening brace
-        val value: PArray = (0..<arraySize).fold(emptyPArray()) { acc, _ ->
+        val value: PArray = (0 until arraySize).fold(emptyPArray()) { acc, _ ->
             val key: PArrayKey = when (val parsed = parseValue(iterator)) {
                 is PArrayKey -> parsed
                 else -> throw UnexpectedValueException("Invalid Array Key.", parsed)
@@ -82,7 +82,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
         val name = parseString(iterator).value
         val fieldsSize = iterator.readUntil(':').toInt()
         iterator.next() // skip opening brace
-        val value: Map<String, PValue> = (0..<fieldsSize).fold(emptyMap()) { acc, _ ->
+        val value: Map<String, PValue> = (0 until fieldsSize).fold(emptyMap()) { acc, _ ->
             val fieldName = when (val parsed = parseValue(iterator)) {
                 is PString -> parsed.value
                 else -> throw UnexpectedValueException("Invalid Object field.", parsed)

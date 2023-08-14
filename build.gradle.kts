@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.9.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.20"
     `java-library`
 }
 
@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    val kotestVersion = "5.6.2"
+    val kotestVersion = "5.5.5"
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 }
