@@ -38,10 +38,10 @@ class Serializer(private val stringCharset: Charset = Charsets.UTF_8) {
     }
 
     private fun serializeArray(value: PArray): String {
-        val serializedElements = value.value.entries.joinToString("") { (key, v) ->
+        val serializedElements = value.entries.joinToString("") { (key, v) ->
             serialize(key as PValue) + serialize(v)
         }
-        return "a:${value.value.size}:{${serializedElements}}"
+        return "a:${value.size}:{${serializedElements}}"
     }
 
     private fun serializeObject(value: PObject): String {

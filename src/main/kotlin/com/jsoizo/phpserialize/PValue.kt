@@ -13,11 +13,22 @@ value class PInt(val value: Long) : PValue, PArrayKey
 @JvmInline
 value class PDouble(val value: Double) : PValue
 
-@JvmInline
-value class PBoolean(val value: Boolean) : PValue
+sealed interface PBoolean: PValue {
+    val value: Boolean
+}
 
-data class PArray(val value: LinkedHashMap<PArrayKey, PValue>) : PValue, Map<PArrayKey, PValue> by value {
-    operator fun plus(item: Pair<PArrayKey, PValue>): PArray = this.apply { value.put(item.first, item.second) }
+object PTrue : PBoolean {
+    override val value: Boolean = true
+    override fun toString(): String = "PTrue"
+}
+
+object PFalse : PBoolean {
+    override val value: Boolean = false
+    override fun toString(): String = "PFalse"
+}
+
+data class PArray(private val value: LinkedHashMap<PArrayKey, PValue>) : PValue, Map<PArrayKey, PValue> by value {
+    operator fun plus(item: Pair<PArrayKey, PValue>): PArray = this.apply { value[item.first] = item.second }
     fun get(key: String): PValue? = value[PString(key)]
     fun get(key: Long): PValue? = value[PInt(key)]
 }

@@ -79,7 +79,7 @@ class UnserializerTest : FunSpec({
         val result = unserializer.unserialize(input)
         result.shouldBeInstanceOf<PArray>()
         result.size shouldBe 4
-        result[PInt(0)] shouldBe PBoolean(true)
+        result[PInt(0)] shouldBe PTrue
         result[PInt(1)] shouldBe PNull
         result[PInt(2)] shouldBe PDouble(-421000000.0)
         result[PInt(3)] shouldBe PString("A to Z")
@@ -90,7 +90,7 @@ class UnserializerTest : FunSpec({
         val result = unserializer.unserialize(input)
         result.shouldBeInstanceOf<PArray>()
         result.size shouldBe 3
-        result[PInt(42)] shouldBe PBoolean(true)
+        result[PInt(42)] shouldBe PTrue
         val secondItem = result[PString("A to Z")].shouldBeInstanceOf<PArray>()
         secondItem.size shouldBe 3
         secondItem[PInt(0)] shouldBe PInt(1)

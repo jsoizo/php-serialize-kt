@@ -60,7 +60,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
 
     private fun parseBoolean(iterator: CharIterator): PBoolean {
         val value = iterator.readUntil(';').firstOrNull()
-        return PBoolean(value == '1')
+        return if (value == '1') PTrue else PFalse
     }
 
     private fun parseArray(iterator: CharIterator): PArray {
@@ -114,7 +114,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
             if (count > 0) {
                 val char = next()
                 val cur = if (Character.isHighSurrogate(char) && hasNext()) {
-                    char.toString() + next().toString()
+                    String(charArrayOf(char, next()))
                 } else {
                     char.toString()
                 }

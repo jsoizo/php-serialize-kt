@@ -58,18 +58,18 @@ class SerializerTest : FunSpec({
         forAll(
             table(
                 headers("case", "input", "expected"),
-                row("true", true, "b:1;"),
-                row("false", false, "b:0;")
+                row("true", PTrue, "b:1;"),
+                row("false", PFalse, "b:0;")
             )
         ) { _, input, expected ->
-            val result = serializer.serialize(PBoolean(input))
+            val result = serializer.serialize(input)
             result shouldBe expected
         }
     }
 
     test("serialize array") {
         val input = pArrayOf(
-            PInt(0) to PBoolean(true),
+            PInt(0) to PTrue,
             PInt(1) to PNull,
             PInt(2) to PDouble(-421000000.0),
             PInt(3) to PString("A to Z")
@@ -80,7 +80,7 @@ class SerializerTest : FunSpec({
 
     test("serialize nested array") {
         val input = pArrayOf(
-            PInt(42) to PBoolean(true),
+            PInt(42) to PTrue,
             PString("A to Z") to PArray(
                 LinkedHashMap(
                     mapOf(
