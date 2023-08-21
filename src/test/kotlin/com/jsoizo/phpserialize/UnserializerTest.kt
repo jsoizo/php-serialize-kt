@@ -124,6 +124,29 @@ class UnserializerTest : FunSpec({
         result["age"] shouldBe PInt(25)
     }
 
+    test("unserialize serializable object") {
+        val input = "C:3:\"obj\":23:{s:15:\"My private data\";}"
+        val result = unserializer.unserialize(input)
+        result.shouldBeInstanceOf<PSerializable>()
+        result.name shouldBe "obj"
+        val value = result.value.shouldBeInstanceOf<PString>()
+        value.value shouldBe "My private data"
+    }
+
+    test("unserialize nested serializable object") {
+        val input =
+            "C:3:\"obj\":85:{a:2:{i:0;s:15:\"My private data\";i:1;C:9:\"nestedObj\":27:{s:19:\"Nested private data\";}}}"
+        val result = unserializer.unserialize(input)
+        result.shouldBeInstanceOf<PSerializable>()
+        result.name shouldBe "obj"
+        val value = result.value.shouldBeInstanceOf<PArray>()
+        value.size shouldBe 2
+        value[PInt(0)].shouldBeInstanceOf<PString>().value shouldBe "My private data"
+        val nestedValue = value[PInt(1)].shouldBeInstanceOf<PSerializable>()
+        nestedValue.name shouldBe "nestedObj"
+        nestedValue.value.shouldBeInstanceOf<PString>().value shouldBe "Nested private data"
+    }
+
     test("unserialize null") {
         val input = "N;"
         val result = unserializer.unserialize(input)

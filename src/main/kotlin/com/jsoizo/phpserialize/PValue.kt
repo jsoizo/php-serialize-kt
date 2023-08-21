@@ -38,6 +38,8 @@ fun pArrayOf(vararg pairs: Pair<PArrayKey, PValue>) = emptyPArray().apply { pair
 
 data class PObject(val name: String, val value: Map<String, PValue>) : PValue, Map<String, PValue> by value
 
+data class PSerializable(val name: String, val value: PValue): PValue
+
 object PNull : PValue {
     override fun toString(): String = "PNull"
 }

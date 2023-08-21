@@ -10,6 +10,7 @@ class Serializer(private val stringCharset: Charset = Charsets.UTF_8) {
         is PBoolean -> serializeBoolean(value)
         is PArray -> serializeArray(value)
         is PObject -> serializeObject(value)
+        is PSerializable -> serializeSerializable(value)
         is PNull -> serializeNull()
     }
 
@@ -49,6 +50,12 @@ class Serializer(private val stringCharset: Charset = Charsets.UTF_8) {
             serialize(PString(key)) + serialize(v)
         }
         return "O:${value.name.length}:\"${value.name}\":${value.size}:{${serializedFields}}"
+    }
+
+    private fun serializeSerializable(value: PSerializable): String {
+        val serializedValue = serialize(value.value)
+        val bytes = serializedValue.toByteArray(stringCharset)
+        return "C:${value.name.length}:\"${value.name}\":${bytes.size}:{${serializedValue}}"
     }
 
     private fun serializeNull(): String {

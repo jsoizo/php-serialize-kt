@@ -128,6 +128,21 @@ class SerializerTest : FunSpec({
         result shouldBe expected
     }
 
+    test("serialize serializable object") {
+        val input = PSerializable("obj", PString("My private data"))
+        val result = serializer.serialize(input)
+        result shouldBe "C:3:\"obj\":23:{s:15:\"My private data\";}"
+    }
+
+    test("serialize nested serializable object") {
+        val nestedValue = PSerializable("nestedObj", PString("Nested private data"))
+        val value = pArrayOf(PInt(0) to PString("My private data"), PInt(1) to nestedValue)
+        val input = PSerializable("obj", value)
+        val result = serializer.serialize(input)
+        result shouldBe "C:3:\"obj\":85:{a:2:{i:0;s:15:\"My private data\";i:1;C:9:\"nestedObj\":27:{s:19:\"Nested private data\";}}}"
+    }
+
+
     test("serialize null") {
         val result = serializer.serialize(PNull)
         result shouldBe "N;"

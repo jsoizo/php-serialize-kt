@@ -30,6 +30,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
             'b' -> parseBoolean(iterator)
             'a' -> parseArray(iterator)
             'O' -> parseObject(iterator)
+            'C' -> parseSerializable(iterator)
             else -> throw UnknownTypeException(type)
         }
     }
@@ -92,6 +93,16 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
         }
         iterator.next() // skip closing brace
         return PObject(name, value)
+    }
+
+    private fun parseSerializable(iterator: CharIterator): PValue {
+        val name = parseString(iterator).value
+        val serializedDataSize = iterator.readUntil(':').toInt()
+        iterator.next() // skip opening brace
+        val serializedData = iterator.readNByte(serializedDataSize, stringCharset)
+        val value = parseValue(serializedData.iterator())
+        iterator.next() // skip closing brace
+        return PSerializable(name, value)
     }
 
     private fun parseNull(iterator: CharIterator): PNull {
