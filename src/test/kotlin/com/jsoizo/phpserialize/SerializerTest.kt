@@ -78,6 +78,12 @@ class SerializerTest : FunSpec({
         result shouldBe "a:4:{i:0;b:1;i:1;N;i:2;d:-421000000;i:3;s:6:\"A to Z\";}"
     }
 
+    test("serialize empty array") {
+        val input = emptyPArray()
+        val result = serializer.serialize(input)
+        result shouldBe "a:0:{}"
+    }
+
     test("serialize nested array") {
         val input = pArrayOf(
             PInt(42) to PTrue,

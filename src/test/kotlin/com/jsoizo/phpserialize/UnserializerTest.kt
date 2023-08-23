@@ -85,6 +85,13 @@ class UnserializerTest : FunSpec({
         result[PInt(3)] shouldBe PString("A to Z")
     }
 
+    test("unserialize empty array") {
+        val input = "a:0:{}"
+        val result = unserializer.unserialize(input)
+        result.shouldBeInstanceOf<PArray>()
+        result.size shouldBe 0
+    }
+
     test("unserialize nested array") {
         val input = "a:3:{i:42;b:1;s:6:\"A to Z\";a:3:{i:0;i:1;i:1;i:2;i:2;i:3;}i:99;N;}"
         val result = unserializer.unserialize(input)
