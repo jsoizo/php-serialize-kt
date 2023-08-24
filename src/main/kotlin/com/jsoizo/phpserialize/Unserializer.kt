@@ -122,7 +122,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
 
     private fun CharIterator.readNByte(n: Int, charset: Charset): String {
         tailrec fun _readNByte(count: Int, acc: String): String =
-            if (count > 0) {
+            if (count <= 0) acc else {
                 val char = next()
                 val cur = if (Character.isHighSurrogate(char) && hasNext()) {
                     String(charArrayOf(char, next()))
@@ -131,7 +131,7 @@ class Unserializer(private val stringCharset: Charset = Charsets.UTF_8) {
                 }
                 val byteCount = cur.toByteArray(charset).size
                 _readNByte(count - byteCount, acc + cur)
-            } else acc
+            }
         return _readNByte(n, "")
     }
 
