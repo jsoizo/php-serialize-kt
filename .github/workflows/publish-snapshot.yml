@@ -25,5 +25,5 @@ jobs:
       - name: Publish
         run: ./gradlew publish
         env:
-          GITHUB_PKG_USER: jsoizo
-          GITHUB_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_USER: ${{ secrets.GH_PKG_USER }}
+          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}

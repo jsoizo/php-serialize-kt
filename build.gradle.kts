@@ -33,8 +33,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/jsoizo/php-serialize-kt")
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_PKG_USER")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_PKG_TOKEN")
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GH_PKG_USER")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("GH_PKG_TOKEN")
             }
         }
     }
