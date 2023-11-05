@@ -1,6 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.20"
     `java-library`
+    `maven-publish`
 }
 
 group = "com.jsoizo"
@@ -24,4 +25,22 @@ java {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/jsoizo/php-serialize-kt")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_PKG_USER")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_PKG_TOKEN")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["java"])
+        }
+    }
 }
